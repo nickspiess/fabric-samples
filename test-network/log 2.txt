@@ -1,0 +1,1 @@
+[31m2022-04-18 23:57:54.959 CDT 0001 ERRO[0m [main] [31;1mInitCmd[0m -> Cannot run peer because error when setting up MSP of type bccsp from directory /Users/nickspiess/desktop/hyper/hyperledger2.4/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp: KeyMaterial not found in SigningIdentityInfo

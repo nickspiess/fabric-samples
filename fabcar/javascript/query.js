@@ -43,8 +43,29 @@ async function main() {
         // Evaluate the specified transaction.
         // queryCar transaction - requires 1 argument, ex: ('queryCar', 'CAR4')
         // queryAllCars transaction - requires no arguments, ex: ('queryAllCars')
-        const result = await contract.evaluateTransaction('queryAllCars');
-        console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
+        console.log(`Querying all Users:`);
+        const result = await contract.evaluateTransaction('queryAllUsers');
+        console.log(`Transaction 1 has been evaluated, result is: ${result.toString()}\n`);
+
+        // query user fabcar sample
+        console.log(`querying single user: nickspiess(USER0)`);
+        const result2 =  await contract.evaluateTransaction('queryUser', 'USER0');
+        console.log(`Transaction 2 has been evaluated, result is: ${result2.toString()}\n`);
+
+        // query user fabcar sample
+        console.log(`querying single user: jahan`);
+        const resultTwo =  await contract.evaluateTransaction('queryUser', 'jahan');
+        console.log(`Transaction two.two has been evaluated, result is: ${resultTwo.toString()}\n`);
+
+        // query user attribute created
+        console.log(`querying single user attribute (major): jahan`);
+        const result3 =  await contract.evaluateTransaction('queryUserAttribute', 'jahan', 'major');
+        console.log(`Transaction 3 has been evaluated, jahan's major is: ${result3.toString()}\n`);
+
+        // Youtube test
+        console.log(`youtube key value pair test:`);
+        const result4 =  await contract.evaluateTransaction('readData', 'key1');
+        console.log(`Transaction 4 has been evaluated, result is: ${result4.toString()}\n`);
 
         // Disconnect from the gateway.
         await gateway.disconnect();

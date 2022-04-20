@@ -10,104 +10,120 @@ const { Contract } = require('fabric-contract-api');
 
 class FabCar extends Contract {
 
+    // init ledger
+    // Need for initLedger as deployChaincode method calls on this
+    // Good practice to initialize the ledger
+    async initLedger2(ctx) {
+        // putState stores value in a key-value pair
+        // await waits until method is executed
+        await ctx.stub.putState("test", "hello world");
+        return "success"
+    }
+
+    // writeData
+    // ctx is a default parameter - context
+    async writeData(ctx, key, value) {
+        await ctx.stub.putState(key, value);
+        return value;
+    }
+
+    // readData
+    async readData(ctx, key) {
+        var response = await ctx.stub.getState(key);
+        return response.toString();
+    }
+
     async initLedger(ctx) {
         console.info('============= START : Initialize Ledger ===========');
-        const cars = [
+        const users = [
             {
-                color: 'blue',
-                make: 'Toyota',
-                model: 'Prius',
-                owner: 'Tomoko',
-            },
-            {
-                color: 'red',
-                make: 'Ford',
-                model: 'Mustang',
-                owner: 'Brad',
-            },
-            {
-                color: 'green',
-                make: 'Hyundai',
-                model: 'Tucson',
-                owner: 'Jin Soo',
-            },
-            {
-                color: 'yellow',
-                make: 'Volkswagen',
-                model: 'Passat',
-                owner: 'Max',
-            },
-            {
-                color: 'black',
-                make: 'Tesla',
-                model: 'S',
-                owner: 'Adriana',
-            },
-            {
-                color: 'purple',
-                make: 'Peugeot',
-                model: '205',
-                owner: 'Michel',
-            },
-            {
-                color: 'white',
-                make: 'Chery',
-                model: 'S22L',
-                owner: 'Aarav',
-            },
-            {
-                color: 'violet',
-                make: 'Fiat',
-                model: 'Punto',
-                owner: 'Pari',
-            },
-            {
-                color: 'indigo',
-                make: 'Tata',
-                model: 'Nano',
-                owner: 'Valeria',
-            },
-            {
-                color: 'brown',
-                make: 'Holden',
-                model: 'Barina',
-                owner: 'Shotaro',
+                username: 'nickspiess',
+                ID: '1234',
+                password: 'pw',
+                email: 'spiess@gmail.com',
+                firstName: 'Nick',
+                lastName: 'Spiess',
+                major: 'Liberal Studies',
+                year: 'Senior',
+
             },
         ];
 
-        for (let i = 0; i < cars.length; i++) {
-            cars[i].docType = 'car';
-            await ctx.stub.putState('CAR' + i, Buffer.from(JSON.stringify(cars[i])));
-            console.info('Added <--> ', cars[i]);
+        // General putCommand 
+        await ctx.stub.putState("test", "hello world");
+
+        // Add users to a list or array of users in the database?
+        for (let i = 0; i < users.length; i++) {
+            users[i].docType = 'user';
+            await ctx.stub.putState('USER' + i, Buffer.from(JSON.stringify(users[i])));
+            console.info('Added <--> ', users[i]);
         }
         console.info('============= END : Initialize Ledger ===========');
     }
 
-    async queryCar(ctx, carNumber) {
-        const carAsBytes = await ctx.stub.getState(carNumber); // get the car from chaincode state
-        if (!carAsBytes || carAsBytes.length === 0) {
-            throw new Error(`${carNumber} does not exist`);
+    async queryUser(ctx, username) {
+        const userAsBytes = await ctx.stub.getState(username); // get the car from chaincode state
+        if (!userAsBytes || userAsBytes.length === 0) {
+            throw new Error(`${username} does not exist`);
         }
-        console.log(carAsBytes.toString());
-        return carAsBytes.toString();
+        console.log(userAsBytes.toString());
+        return userAsBytes.toString();
     }
 
-    async createCar(ctx, carNumber, make, model, color, owner) {
-        console.info('============= START : Create Car ===========');
+    async queryUserAttribute(ctx, username, attribute) {
+        console.log("in the function 1")
+        /*const userAsBytes = await ctx.stub.getState(username); // get the car from chaincode state
+        if (!userAsBytes || userAsBytes.length === 0) {
+            throw new Error(`${username} does not exist`);
+        }
+        user = JSON.parse(username.toString());
+        console.log("in the function 2")
+        //const user = JSON.parse(userAsBytes.toString());
+        //let major = user.attribute;
+        // or user.major
+        console.log("Users major is"  + user.major);
+        */
 
-        const car = {
-            color,
-            docType: 'car',
-            make,
-            model,
-            owner,
+       /*const userAsBytes = await ctx.stub.getState(username); // get the car from chaincode state
+       if (!userAsBytes || userAsBytes.length === 0) {
+           throw new Error(`${username} does not exist`);
+       }
+
+        let r = userAsBytes.major;*/
+
+        var response = await ctx.stub.getState(username);
+        response = response.major;
+        return response;
+
+        console.info('=======================================');
+        //console.log(userAsbytes.major.toString());
+        console.info('=======================================');
+        return r;
+
+
+        //return userAsbytes;
+    }
+
+    async createUser(ctx, username, ID, password, email, firstName, lastName, major, year) {
+        console.info('============= START : Create User ===========');
+
+        const user = {
+            username,
+            ID,
+            docType: 'user',
+            password,
+            email,
+            firstName,
+            lastName,
+            major,
+            year
         };
 
-        await ctx.stub.putState(carNumber, Buffer.from(JSON.stringify(car)));
-        console.info('============= END : Create Car ===========');
+        await ctx.stub.putState(username, Buffer.from(JSON.stringify(user)));
+        console.info('============= END : Create User ===========');
     }
 
-    async queryAllCars(ctx) {
+    async queryAllUsers(ctx) {
         const startKey = '';
         const endKey = '';
         const allResults = [];
@@ -126,18 +142,20 @@ class FabCar extends Contract {
         return JSON.stringify(allResults);
     }
 
-    async changeCarOwner(ctx, carNumber, newOwner) {
-        console.info('============= START : changeCarOwner ===========');
+    async changeUserMajor(ctx, username, newMajor) {
+        console.info('============= START : changeUserMajor ===========');
 
-        const carAsBytes = await ctx.stub.getState(carNumber); // get the car from chaincode state
-        if (!carAsBytes || carAsBytes.length === 0) {
-            throw new Error(`${carNumber} does not exist`);
+        const userAsBytes = await ctx.stub.getState(username); // get the car from chaincode state
+        // check if it exists
+        if (!userAsBytes || userAsBytes.length === 0) {
+            throw new Error(`${username} does not exist`);
         }
-        const car = JSON.parse(carAsBytes.toString());
-        car.owner = newOwner;
 
-        await ctx.stub.putState(carNumber, Buffer.from(JSON.stringify(car)));
-        console.info('============= END : changeCarOwner ===========');
+        const user = JSON.parse(userAsBytes.toString());
+        user.major = newMajor;
+
+        await ctx.stub.putState(username, Buffer.from(JSON.stringify(user)));
+        console.info('============= END : changeUserMajor ===========');
     }
 
 }
