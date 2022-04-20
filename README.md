@@ -1,0 +1,51 @@
+# fabric-samples - Hyperledger Fabric ID Management System
+
+- Be based and be on a Unix system
+- Install Docker
+- Install Curl Terminal tool
+    - sudo apt-get install curl
+- Install most recent binaries
+    - curl -sSL https://bit.ly/2ysbOFE | bash -s
+- Replace fabcar.js file
+    - fabric-samples/chaincode/fabcar/lib
+- Replace invoke.js and query.js files
+    - Fabric-samples/fabcar/javascript and fabric-samples/chaincode/fabcar/javascript
+- From Terminal, go to fabric-samples/fabcar/javascript directory and “ fabric-samples/chaincode/fabcar/javascript “
+    - Run “npm install”
+- From terminal, go into the fabric-samples/fabcar/javascript folder
+- You have to do this every time 
+    - Run “./startFabric.sh javascript”
+    - This brings up the network, on “mychannel” initializing the fabcar.js chaincode file (fabric-samples/chaincode/fabcar/javascript), which in turn, invokes a single user upon initializing, using initLedger() function within fabcar.js
+    - Chaincode is essentially the logic we will use to communicate with the database.  
+    - It has the ability to store functions within it that are accessible to those who have the chaincode installed on their node
+- Upon bringing up the network, you can go to “ http://localhost:5984/_utils/# “  in your browser
+    - This brings up a directory view of the database
+    - In mychannel_fabcar , you will be able to find the constructed user with all their associated attributes
+    - This is using couchDB
+- From the fabcar folder in Terminal
+    - Run “ node enrollAdmin.js “
+    - This enrolls an admin user
+    - Run “ node registerUser.js “
+    - This enrolls a general user
+        - Both of these will generate users and generate their ID’s with certificates (containing credentials and private key information to validate their identity on the network)
+        - This is called upon through the connection profile (connection-org1.json) file within “ test-network/organizations/peerOrganizations/client “ directory
+            - This has all the info needed to initialize an identity
+            - This is down through an array of commands being:
+                - 
+        - You can look in the wallet folder in the fabcar/javascript directory to see the files (fileName).id
+- Now, we can use the users to interact with the chaincode
+    - Invoking : submitTransaction(‘chaincodeMethodName’, ‘username’, ‘id’, ‘firstName’, etc)
+    - querying: evaluateTransaction(‘chaincodeMethodName’)
+- Functions that access the network from javascript files:
+    - Loads network config (connection-org1.json) file
+    - Creates or checks for wallet and saves that path, assigning the newFileSystemWallet(walletPath)
+    - Check if appUser is created
+    - Creates Gateway object
+        - const gateway = new Gateway();
+        - Connects to network:
+            - Await gateway.connect(pathToNetwork, {wallet, identity ‘userName’, discovery: { enabled: true, asLocalhost: true } } )
+    - Get network channel the. Contract is deployed to
+        - Const network = await gateway.getNetwork(‘mychannel’);
+    - Get the contract
+        - Const contract = network.getContract(‘fabcar’);
+- Hyperledger stores objects as key value pairs
