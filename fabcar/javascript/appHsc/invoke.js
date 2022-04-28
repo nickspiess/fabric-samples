@@ -53,7 +53,7 @@ async function main() {
 
         //updated submit transaction - createUser()
         await contract.submitTransaction('createUser', 'jahan', '12345', 'pw', 'jahan@school.omg', 'Jahan',
-        "Sumiarta", "ComputerScience", "junior");
+        "Sumiarta", "Computer Science", "junior", "jahansAddress");
         console.log('Transaction 2 has been submitted');
 
         // user structure for context
