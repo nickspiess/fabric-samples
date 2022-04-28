@@ -1,0 +1,23 @@
+{
+  "name": "apphsc",
+  "version": "1.0.0",
+  "description": "web app for hyperledger fabric",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "fabric-ca-client": "^2.2.4",
+    "fabric-network": "^2.2.4"
+  },
+  "devDependencies": {
+    "mocha": "^7.1.2",
+    "supertest": "^4.0.2"
+  },
+  "scripts": {
+    "test": "mocha -t 5000 test/specs.js"
+  },
+  "author": "SpiessNick",
+  "license": "ISC"
+}

@@ -14,7 +14,7 @@ const fs = require('fs');
 async function main() {
     try {
         // load the network configuration
-        const ccpPath = path.resolve(__dirname, '..', '..', 'test-network', 'organizations', 'peerOrganizations', 'org1.example.com', 'connection-org1.json');
+        const ccpPath = path.resolve(__dirname, '..', '..', '..', 'test-network', 'organizations', 'peerOrganizations', 'org1.example.com', 'connection-org1.json');
         const ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
 
         // Create a new file system based wallet for managing identities.
@@ -56,12 +56,12 @@ async function main() {
         console.log(`querying single user: jahan`);
         const resultTwo =  await contract.evaluateTransaction('queryUser', 'jahan');
         console.log(`Transaction two.two has been evaluated, result is: ${resultTwo.toString()}\n`);
-
+        
         // query user attribute created
         console.log(`querying single user attribute (major): jahan`);
         const result3 =  await contract.evaluateTransaction('queryUserAttribute', 'jahan', 'major');
         console.log(`Transaction 3 has been evaluated, jahan's major is: ${result3.toString()}\n`);
-
+        
         // Youtube test
         console.log(`youtube key value pair test:`);
         const result4 =  await contract.evaluateTransaction('readData', 'key1');
