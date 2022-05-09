@@ -16,7 +16,8 @@
     "supertest": "^4.0.2"
   },
   "scripts": {
-    "test": "mocha -t 5000 test/specs.js"
+    "test": "mocha -t 5000 test/specs.js",
+    "start": "node index.js"
   },
   "author": "SpiessNick",
   "license": "ISC"

@@ -8,25 +8,51 @@
  // requirements
  // ---------------------------------
 
-
  // We include some requirements
  const express = require('express');
  const bodyParser = require('body-parser');
+ const PORT = process.env.port || 4000;
+ const util = require('util')
+
+ // ---------------------------------
+ // express.js
+ // ---------------------------------
+ // create based express instance
+ const app = express();
+
+ const cors = require("cors");
+ app.use(cors());
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
+
+// create application/json parser
+var jsonParser = bodyParser.json()
+ 
+// create application/x-www-form-urlencoded parser
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
  // we include our API endpoint code
  // General query
- let query = require('./index-query');
+ let query = require('./routes/index-query');
  // General DB invoke
- let invoke = require('./index-set');
+ let invoke = require('./routes/index-set');
+
+ let remove = require('./routes/removeUser');
+
+ let queryAll = require('./routes/queryAllUsers')
 
 // update financial login attributes
- //let updateFinancialAttributes = require('./financialLogin.js');
+ //let updateFinancialAttributes = require('./routes/financialLogin');
 
  // update address login attributes
- let updateContactInfo = require('./updateContactInfo');
+ let updateContactInfo = require('./routes/updateContactInfo');
 
  // change major
- let changeMajor = require('./changeMajor');
+ let changeMajor = require('./routes/changeMajor');
 
 
  // We include our connection model
@@ -38,19 +64,6 @@
  // We define a global variable/pointer to catch on interrupt signal
  // and do a disconnect from the gateway
  let gateway;
-
- // ---------------------------------
- // express.js
- // ---------------------------------
-
- // create based express instance
- const app = express();
-
- // Include the bodyParser for post requests
- app.use(bodyParser.json());
- app.use(bodyParser.urlencoded({
-     extended: true
- }));
 
  // On start, connect to gateway
  connectToContract(config).then(function(connection){
@@ -65,16 +78,42 @@
       // ---------------------------------
 
       // We check if API is funning
-      app.get('/', function (req, res) {
-          res.json({msg:'hello fabric api'});
-      })
+      app.get("/", (req, res) => {
+        res.json({message:'hello fabric api'});
+        })
+
+        // General 404 error for a route not existing
+        //app.get("*", (req, res) => 
+        //res
+        //    .status(404)
+        //    .json({ message: "Route does not exist", app: "Seam" })
+        //);
 
       // Query by key (a || b)
       // @apiParam {string} [a,b]
+      // :key /query/:key
       app.get('/query/:key', async function (req, res) {
+          //console.log("we are logging  " + req.toString())
           let result = await query(req, connection.contract)
           res.json(result);
+          //res.send("Returned Users")
       })
+
+      /*app.get('/query/:key', (req, res)=> {
+        console.log("we are logging  " + req.toString())
+      let result = queryUser(req, connection.contract)
+      res.json(result);
+      //res.send("Returned Users")
+  })*/
+
+      app.get('/queryAllUsers', async (req, res)=> {
+        const userObj = {
+            username: 'jahan'
+        }
+        let result = await queryAll(req, connection.contract)
+        console.log(result);
+        res.json(result);
+    })
 
       // We transfer a value from A to B or from B to A
       // @apiParam {string} p1 [A, B]
@@ -84,6 +123,11 @@
           let result = await invoke(req, connection.contract)
           res.json(result);
       })
+
+      app.delete('/remove', async function (req, res) {
+        let result = await remove(req, connection.contract)
+        res.json(result);
+    })
 
       // update financial attributes
       app.post('/updateFinancialAttributes', async function (req, res) {
@@ -106,8 +150,9 @@
     })
 
       // finally, we start the API server
-      app.listen(3000, function() {
-          console.log('- api server started listening on port 3000')
+      app.listen(PORT, () => {
+          const url = 'http://localhost:4000'
+          console.log('- api server started listening on port 4000')
       });
  })
 
