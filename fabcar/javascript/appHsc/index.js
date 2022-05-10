@@ -24,11 +24,11 @@
  app.use(cors());
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+//app.use(bodyParser.urlencoded({ extended: false }))
 
 // parse application/json
-app.use(bodyParser.json())
-
+//app.use(bodyParser.json())
+app.use(express.json())
 // create application/json parser
 var jsonParser = bodyParser.json()
  
@@ -93,10 +93,17 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
       // @apiParam {string} [a,b]
       // :key /query/:key
       app.get('/query/:key', async function (req, res) {
-          //console.log("we are logging  " + req.toString())
           let result = await query(req, connection.contract)
-          res.json(result);
-          //res.send("Returned Users")
+          // Try to send if no error
+          try  {
+            let response = JSON.parse(result.toString());
+            res.set('Content-Type', 'application/json');
+            res.send({response})
+
+          }// if error, send the result w/o json formatting 
+          catch(err) {
+              res.send({result})
+          }
       })
 
       /*app.get('/query/:key', (req, res)=> {

@@ -16,23 +16,20 @@
     it("creating a user", async function() {
         //this.skip();
         let payload = {
-            email: 'jahan@school.omg',
-            password: 'test1234555',
-            username: 'jahan@school.omg',
-            firstName: 'jahan',
-            lastName: 'Sumiarta',
-            major: "Computer science",
-            year: "junior",
-            id: '12345',
-            address: "123 test"
+            email: 'test@gmail.com',
+            password: 'passwordhaha5',
+            username: 'test@gmail.com',
+            firstName: 'test',
+            lastName: 'account',
+            dateOfBirth: '02/15/1997'
         };
         let result = await api.post('/invoke').send(payload)
         console.log(result.body)
     })
 
-    it("query a user (key) jahan@school.omg", async function() {
+    it("query a user (key) test@gmail.com", async function() {
         //this.skip();
-        let key = 'paul@school.omg';
+        let key = 'test@gmail.com';
         let result = await api.get('/query/'+key)
         console.log(result.body)
     })
@@ -60,7 +57,7 @@
     })
 
     it("remove a user jahan", async function() {
-        //this.skip();
+        this.skip();
         let payload = {
             username: 'jahan',
         };
@@ -83,7 +80,7 @@
     })
 
     it("query a user (key) jahan", async function() {
-        //this.skip();
+        this.skip();
         let key = 'jahan';
         let result = await api.get('/query/:'+key)
         console.log(result.body)

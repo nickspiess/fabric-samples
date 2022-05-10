@@ -13,10 +13,10 @@
     let username = req.body.username;
     let firstName = req.body.firstName;
     let lastName = req.body.lastName;
-    let major = req.body.major;
-    let year = req.body.year;
-    let id = req.body.id;
-    let address = req.body.address;
+    let dateOfBirth = req.body.dateOfBirth;
+    //let year = req.body.year;
+    //let id = req.body.id;
+    //let address = req.body.address;
     
     try {
         console.log('we in')
@@ -25,9 +25,9 @@
         Submit a transaction to the ledger.  Transaction function name will be evaluated
         on the endorsing peers and then submitted to the ordering service for committing to the  ledger
         */
-       //updated submit transaction - createUser()
+       //updated submit transaction - createUser() email, password, username, firstName, lastName, dateOfBirth
        await contract.submitTransaction('createUser', email, password, username, 
-       firstName, lastName, major, year, id, address);
+       firstName, lastName, dateOfBirth);
 
        // Prepare the return value
        let r = 'Transaction has been sucessfully submitted: '+username;

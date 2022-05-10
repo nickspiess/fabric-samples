@@ -35,6 +35,7 @@ class FabCar extends Contract {
                 ID: '1234',
                 firstName: 'Nick',
                 lastName: 'Spiess',
+                dateOfBirth: '02/15/1997',
                 major: 'Liberal Studies',
                 year: 'Senior',
                 // location
@@ -94,7 +95,7 @@ class FabCar extends Contract {
         return userAsBytes.password.toString();
     }
 
-    async createUser(ctx, email, password, username, firstName, lastName, major, year, ID, address) {
+    async createUser(ctx, email, password, username, firstName, lastName, dateOfBirth) {
         console.info('============= START : Create User ===========');
 
         const user = {
@@ -105,11 +106,12 @@ class FabCar extends Contract {
             firstName,
             lastName,
             // academic
-            major,
-            year,
-            ID,
+            dateOfBirth,
+            major: ' ',
+            year: ' ',
+            ID: ' ',
             // location
-            address,
+            address: ' ',
             zip: ' ',
             state: ' ',
             phone: ' ',
