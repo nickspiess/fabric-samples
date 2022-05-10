@@ -7,6 +7,8 @@
  'use strict';
  module.exports = async function (req, contract) {
 
+    console.log("This is our request : " + req)
+
     // Get keys and value from POST request
     let email = req.body.email;
     let password = req.body.password;
@@ -19,7 +21,8 @@
     //let address = req.body.address;
     
     try {
-        console.log('we in')
+        console.log('request is: ' + req)
+
         /*
         Submit spec. transaction
         Submit a transaction to the ledger.  Transaction function name will be evaluated
@@ -31,10 +34,12 @@
 
        // Prepare the return value
        let r = 'Transaction has been sucessfully submitted: '+username;
+       console.log(r);
        return r;
     }
     catch(error) {
         let r = {r:'Failed to submit transaction: '+error};
+        console.log(r);
         return r;
     }
  }

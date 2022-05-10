@@ -155,31 +155,54 @@ class FabCar extends Contract {
         }
 
         const user = JSON.parse(userAsBytes.toString());
-        user.major = newMajor.toString();
+        user.bank = newMajor.toString();
+
+        await ctx.stub.putState(username, Buffer.from(JSON.stringify(user)));
+        console.info('============= END : changeUserMajor ===========');
+    }
+
+    async updateContactInformation(ctx, username, newAddress) {
+        console.info('============= START : changeUserMajor ===========');
+
+        const userAsBytes = await ctx.stub.getState(username); // get the car from chaincode state
+        // check if it exists
+        if (!userAsBytes || userAsBytes.length === 0) {
+            throw new Error(`${username} does not exist`);
+        }
+
+        const user = JSON.parse(userAsBytes.toString());
+        user.address = newAddress.toString();
 
         await ctx.stub.putState(username, Buffer.from(JSON.stringify(user)));
         console.info('============= END : changeUserMajor ===========');
     }
 
         // UpdateAsset updates an existing asset in the world state with provided parameters.
-    async updateContactInfo(ctx, email, newAddress, newZip, newState, newPhone) {
+    async updateContactInfo(ctx, username, newAddress, newZip, newState, newPhone) {
         console.info('============= START : changeUserContact ===========')
-            const exists = await this.AssetExists(ctx, email);
-            if (!exists) {
-                throw new Error(`The asset ${email} does not exist`);
+            // check if it exists
+            const userAsBytes = await ctx.stub.getState(username); 
+            if (!userAsBytes || userAsBytes.length === 0) {
+                throw new Error(`${username} does not exist`);
             }
     
             // overwriting original asset with new asset
             const updatedUser = {
-                email: email,
+                username: username,
                 address: newAddress,
                 zip: newZip,
-                newState: newState,
-                newPhone: newPhone,
+                state: newState,
+                phone: newPhone,
             };
+            const user = JSON.parse(userAsBytes.toString());
+            user.address = newAddress.toString();
+            //user.zip = newZip.toString();
+            //user.state = newState.toString();
+            //user.newPhone = newPhone.toString();
+
             console.info('============= END : changeUserContact ===========');
             // we insert data in alphabetic order using 'json-stringify-deterministic' and 'sort-keys-recursive'
-            return ctx.stub.putState(id, Buffer.from(stringify(sortKeysRecursive(updatedUser))));
+            await ctx.stub.putState(username, Buffer.from(JSON.stringify(user)));
     }
 /*
     async updateContactInfo(ctx, username, newAddress, newZip, newState, newPhone) {

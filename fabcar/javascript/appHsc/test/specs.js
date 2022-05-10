@@ -28,17 +28,17 @@
     })
 
     it("query a user (key) test@gmail.com", async function() {
-        //this.skip();
+        this.skip();
         let key = 'test@gmail.com';
         let result = await api.get('/query/'+key)
         console.log(result.body)
     })
     
     it("update contact info", async function() {
-        this.skip();
+        //this.skip();
         // Simulating the data passed from the front end : username, address, zip, state, phone
         let payload = {
-            username: 'jahan@school.omg',
+            username: 'test@gmail.com',
             address: '123 strees',
             zip: '54701',
             state: 'wi',
@@ -49,12 +49,6 @@
         console.log(result.body)
     })
 
-    it("query a user #2 jahan", async function() {
-        this.skip();
-        let key = 'jahan';
-        let result = await api.get('/query/'+key)
-        console.log(result.body)
-    })
 
     it("remove a user jahan", async function() {
         this.skip();
@@ -68,10 +62,10 @@
 
 
     it("Changing Major : jahan to shitposting", async function() {
-        this.skip();
+        //this.skip();
         // Simulating the data passed from the front end : username, address, zip, state, phone
         let payload = {
-            username: 'jahan',
+            username: 'test@gmail.com',
             major: 'math',
         };
         //JSON.stringify(key)
@@ -79,12 +73,11 @@
         console.log(result.body)
     })
 
-    it("query a user (key) jahan", async function() {
-        this.skip();
-        let key = 'jahan';
-        let result = await api.get('/query/:'+key)
+    it("query a user #2 jahan", async function() {
+        //this.skip();
+        let key = 'test@gmail.com';
+        let result = await api.get('/query/'+key)
         console.log(result.body)
-    });
-
+    })
 
  })

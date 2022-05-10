@@ -32,7 +32,7 @@
         
         console.log('values: ' + ' ' + username + ' ' + address + ' ' + zip + ' ' + state + ' '  + phone);
 
-        await contract.evaluateTransaction('updateContactInfo',username, address, zip, state, phone);
+        await contract.evaluateTransaction('updateContactInformation',username, address);
 
         // Contruct the final return object
         let r = 'Transaction has been sucessfully submitted: '+username;
