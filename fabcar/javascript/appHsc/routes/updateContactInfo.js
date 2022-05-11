@@ -12,10 +12,9 @@
     // Get keys and value from POST request
 
     let username = req.body.username;
-    
     // UPDATE TO CONTACT INFO
     let address = req.body.address;
-    let zip = req.body.zip;
+    let zip = req.body.zipCode;
     let state = req.body.state;
     let phone = req.body.phone;
 
@@ -32,11 +31,13 @@
         
         console.log('values: ' + ' ' + username + ' ' + address + ' ' + zip + ' ' + state + ' '  + phone);
 
-        await contract.evaluateTransaction('updateContactInformation',username, address);
+        await contract.submitTransaction('updateContactInformation',username, address, zip, state, phone);
+        let result = await contract.evaluateTransaction('queryUser',username);
 
-        // Contruct the final return object
-        let r = 'Transaction has been sucessfully submitted: '+username;
-        return r;
+        // Prepare the return value
+        //let r = 'Transaction has been sucessfully submitted: '+username;
+        console.log(result);
+        return result;
     } catch(err) {
         //console.log('Failed to evaluate trnsaction:', err)
         console.error('Failed to submit transaction:', err);

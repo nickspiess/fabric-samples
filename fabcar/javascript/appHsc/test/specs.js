@@ -8,13 +8,13 @@
  describe("Hyperledger Fabric API test", function() {
 
     it("checks if api is running", async function() {
-        //this.skip();
+        this.skip();
         let result = await api.get('/');
         console.log(result.body)
     })
 
     it("creating a user", async function() {
-        //this.skip();
+        this.skip();
         let payload = {
             email: 'test@gmail.com',
             password: 'passwordhaha5',
@@ -35,7 +35,7 @@
     })
     
     it("update contact info", async function() {
-        //this.skip();
+        this.skip();
         // Simulating the data passed from the front end : username, address, zip, state, phone
         let payload = {
             username: 'test@gmail.com',
@@ -45,7 +45,22 @@
             phone: '651',
         };
         //JSON.stringify(key)
-        let result = await api.post('/updateContactInfo/').send(payload)
+        let result = await api.post('/updateContactInfo').send(payload)
+        console.log(result.body)
+    })
+
+    it("update financial info", async function() {
+        //this.skip();
+        // Simulating the data passed from the front end : username, address, zip, state, phone
+        let payload = {
+            username: 'nickspiess11@gmail.com',
+            bank: 'US Bank',
+            cardType: 'Visa',
+            cardNumber: '1234123412341234',
+            csv: '500',
+        };
+        //JSON.stringify(key)
+        let result = await api.post('/updateFinancialInformation').send(payload)
         console.log(result.body)
     })
 
@@ -62,7 +77,7 @@
 
 
     it("Changing Major : jahan to shitposting", async function() {
-        //this.skip();
+        this.skip();
         // Simulating the data passed from the front end : username, address, zip, state, phone
         let payload = {
             username: 'test@gmail.com',
@@ -75,7 +90,7 @@
 
     it("query a user #2 jahan", async function() {
         //this.skip();
-        let key = 'test@gmail.com';
+        let key = 'nickspiess11@gmail.com';
         let result = await api.get('/query/'+key)
         console.log(result.body)
     })

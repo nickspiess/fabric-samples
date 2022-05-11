@@ -32,10 +32,12 @@
        await contract.submitTransaction('createUser', email, password, username, 
        firstName, lastName, dateOfBirth);
 
+       let result = await contract.evaluateTransaction('queryUser',email);
+
        // Prepare the return value
-       let r = 'Transaction has been sucessfully submitted: '+username;
-       console.log(r);
-       return r;
+       //let r = 'Transaction has been sucessfully submitted: '+username;
+       console.log(result);
+       return result;
     }
     catch(error) {
         let r = {r:'Failed to submit transaction: '+error};

@@ -46,7 +46,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
  let queryAll = require('./routes/queryAllUsers')
 
 // update financial login attributes
- //let updateFinancialAttributes = require('./routes/financialLogin');
+ let updateFinancialInformation = require('./routes/updateFinancialInfo');
 
  // update address login attributes
  let updateContactInfo = require('./routes/updateContactInfo');
@@ -128,7 +128,16 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
       // @apiParam {string} value value to transfer
       app.post('/invoke', async function (req, res) {
           let result = await invoke(req, connection.contract)
-          res.json(result);
+          // Try to send if no error
+          try  {
+            let response = JSON.parse(result.toString());
+            //res.set('Content-Type', 'application/json');
+            res.send({response})
+          }// if error, send the result w/o json formatting 
+          catch(err) {
+              res.send({result})
+          }
+          //res.json(result);
       })
 
       app.delete('/remove', async function (req, res) {
@@ -137,16 +146,33 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
     })
 
       // update financial attributes
-      app.post('/updateFinancialAttributes', async function (req, res) {
-        let result = await updateFinancialAttributes(req, connection.contract)
-        res.json(result);
+      app.post('/updateFinancialInformation', async function (req, res) {
+          console.log("our request is : " + req)
+        let result = await updateFinancialInformation(req, connection.contract)
+        // Try to send if no error
+        try  {
+          let response = JSON.parse(result.toString());
+          //res.set('Content-Type', 'application/json');
+          res.send({response})
+        }// if error, send the result w/o json formatting 
+        catch(err) {
+            res.send({result})
+        }
     })
 
     // update contact info
     // Sending JSON format req string of all info : username, address, zip, state, phone
     app.post('/updateContactInfo', async function (req, res) {
         let result = await updateContactInfo(req, connection.contract)
-        res.json(result);
+        // Try to send if no error
+        try  {
+          let response = JSON.parse(result.toString());
+          //res.set('Content-Type', 'application/json');
+          res.send({response})
+        }// if error, send the result w/o json formatting 
+        catch(err) {
+            res.send({result})
+        }
     })
 
     // update contact info
